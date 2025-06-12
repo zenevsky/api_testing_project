@@ -90,6 +90,8 @@ jobs:
           java-version: '21'
       - name: Install Allure
         run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.34.0/allure-2.34.0.tgz && sudo tar -zxvf allure-2.34.0.tgz -C /opt/ && sudo ln -s /opt/allure-2.34.0/bin/allure /usr/bin/allure
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4
       - name: Generate report
         run: allure generate -c allure-results -o _site
       - name: Save allure report
