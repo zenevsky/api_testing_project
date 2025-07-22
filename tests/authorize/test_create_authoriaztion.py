@@ -13,7 +13,7 @@ class TestCreateAuthorization:
     @pytest.mark.critical
     @allure.title('Create authorization token with valid name')
     def test_create_auth_with_valid(self, create_authorize_token_endpoint, authorize_payload):
-        create_authorize_token_endpoint.create_authorize_token(payload=authorize_payload)
+        create_authorize_token_endpoint.create_authorize_token(payload=AuthorizePayload())
         create_authorize_token_endpoint.check_that_status_is_200()
         create_authorize_token_endpoint.check_auth_user_is_correct(authorize_payload.name)
 

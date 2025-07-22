@@ -1,7 +1,8 @@
 import pytest
 
-from endpoints.authorize.create_authorize_token import CreateAuthorizeToken
-from endpoints.authorize.get_authorize_token import GetAuthorizeToken
+from endpoints.authorize.create_auth_token import CreateAuthorizeToken
+from endpoints.authorize.get_auth_token import GetAuthorizeToken
+from endpoints.authorize.kill_auth_token import KillAuthorizeToken
 from endpoints.meme.get_memes import GetMemes
 from endpoints.meme.get_meme import GetMeme
 from endpoints.meme.create_meme import CreateMeme
@@ -24,6 +25,11 @@ def create_authorize_token_endpoint():
 @pytest.fixture()
 def get_authorize_token_endpoint():
     return GetAuthorizeToken()
+
+
+@pytest.fixture()
+def kill_authorize_token_endpoint():
+    return KillAuthorizeToken()
 
 
 @pytest.fixture(scope='session', autouse=True)
@@ -49,6 +55,7 @@ def create_meme_endpoint():
 @pytest.fixture()
 def create_meme_payload():
     return CreateMemePayload()
+
 
 @pytest.fixture()
 def update_meme_payload():

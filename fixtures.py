@@ -1,6 +1,6 @@
 import pytest
 
-from endpoints.authorize.create_authorize_token import CreateAuthorizeToken
+from endpoints.authorize.create_auth_token import CreateAuthorizeToken
 
 
 @pytest.fixture(scope='session', autouse=True)
