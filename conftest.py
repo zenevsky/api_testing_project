@@ -1,5 +1,4 @@
 import pytest
-from requests import session
 
 from endpoints.authorize.create_authorize_token import CreateAuthorizeToken
 from endpoints.authorize.get_authorize_token import GetAuthorizeToken
@@ -8,6 +7,13 @@ from endpoints.meme.get_meme import GetMeme
 from endpoints.meme.create_meme import CreateMeme
 from endpoints.meme.update_meme import UpdateMeme
 from endpoints.meme.delete_meme import DeleteMeme
+
+from endpoints.authorize.models.auth_object_model import AuthorizePayload
+from endpoints.meme.models.meme_object_model import CreateMemePayload
+from endpoints.meme.models.meme_object_model import UpdateMemePayload
+
+from fixtures import create_authorize_token_for_session  # NOQA F401
+from fixtures import meme_id_fixture  # NOQA F401
 
 
 @pytest.fixture()
@@ -18,6 +24,11 @@ def create_authorize_token_endpoint():
 @pytest.fixture()
 def get_authorize_token_endpoint():
     return GetAuthorizeToken()
+
+
+@pytest.fixture(scope='session', autouse=True)
+def authorize_payload():
+    return AuthorizePayload()
 
 
 @pytest.fixture()
@@ -36,6 +47,15 @@ def create_meme_endpoint():
 
 
 @pytest.fixture()
+def create_meme_payload():
+    return CreateMemePayload()
+
+@pytest.fixture()
+def update_meme_payload():
+    return UpdateMemePayload()
+
+
+@pytest.fixture()
 def update_meme_endpoint():
     return UpdateMeme()
 
@@ -43,25 +63,3 @@ def update_meme_endpoint():
 @pytest.fixture()
 def delete_meme_endpoint():
     return DeleteMeme()
-
-
-@pytest.fixture(scope='session', autouse=True)
-def create_authorize_token_for_session(request):
-    auth = CreateAuthorizeToken()
-    payload = {'name': 'test'}
-    auth.create_authorize_token(payload)
-    request.config.token = auth.token
-    request.config.user = auth.user
-    yield auth.token
-
-
-@pytest.fixture()
-def meme_id_fixture(request, create_meme_endpoint, delete_meme_endpoint):
-    create_meme_endpoint.create_meme(
-        payload={"text": "test", "url": "test", "tags": ["test"], "info": {"test": "test"}},
-        headers={'Content-type': 'application/json', 'Authorization': request.config.token}
-    )
-    yield create_meme_endpoint.meme_id
-    delete_meme_endpoint.delete_meme(
-        meme_id=create_meme_endpoint.meme_id,
-        headers={'Content-type': 'application/json', 'Authorization': request.config.token})

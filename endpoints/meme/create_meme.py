@@ -2,19 +2,18 @@ import allure
 import requests
 import json
 
+from requests import Response
+
 from endpoints.endpoint import Endpoint
+from endpoints.meme.models.meme_pydantic_model import MemeModel
+from endpoints.meme.models.meme_object_model import CreateMemePayload
 
 
 class CreateMeme(Endpoint):
-    meme_id = None
-    meme_text = None
-    meme_url = None
-    meme_tags = None
-    meme_info = None
-    meme_updated_by = None
 
     @allure.step('Run "Create meme" request to create new meme')
-    def create_meme(self, payload, headers=None):
+    def create_meme(self, payload: CreateMemePayload, headers=None) -> Response:
+        payload = payload.to_dict()
         headers = headers if headers else self.headers
         self.response = requests.post(
             url=f'{self.url}/meme',
@@ -23,12 +22,7 @@ class CreateMeme(Endpoint):
         )
         try:
             self.json = self.response.json()
-            self.meme_id = self.json['id']
-            self.meme_text = self.json['text']
-            self.meme_url = self.json['url']
-            self.meme_tags = self.json['tags']
-            self.meme_info = self.json['info']
-            self.meme_updated_by = self.response.json()['updated_by']
+            self.model = MemeModel(**self.json)
         except json.JSONDecodeError as e:
             print(f"JSON Decode Error: {e}")
         return self.response

@@ -1,20 +1,22 @@
+from endpoints.meme.models.meme_enumerators import Tags
+
 POSITIVE_DATA = [
     {
         "text": "test",
         "url": "https://miro.medium.com/v2/resize:fit:1400/1*GI-td9gs8D5OKZd19mAOqA.png",
-        "tags": ["test"],
+        "tags": [Tags.lol],
         "info": {"test": "test"}
     },
     {
         "text": "",
         "url": "",
-        "tags": ["test"],
+        "tags": [Tags.lol],
         "info": {"test": "test"}
     },
     {
         "text": "test 123 !@##$%^&*()_-+= тест 漢字",
         "url": "123",
-        "tags": ["test", 123, True, {"test": "test"}],
+        "tags": [Tags.lol],
         "info": {"test": {"test": "test"}}
     }
 ]

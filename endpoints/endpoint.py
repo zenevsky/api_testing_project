@@ -2,11 +2,11 @@ import allure
 
 
 class Endpoint:
-    url = 'http://167.172.172.115:52355/'
+    url = 'http://memesapi.course.qa-practice.com/'
+    payload = None
     response = None
     json = None
-    token = None
-    user = None
+    model = None
     headers = {'Content-type': 'application/json'}
 
     @allure.step('Check that response is 200')
@@ -47,8 +47,15 @@ class Endpoint:
 
     @allure.step('Check that tags is the same as in the request')
     def check_tags_is_correct(self, tags):
-        assert self.response.json()['tags'] == tags
+        expected_tags = [tag.value for tag in tags]
+        assert self.response.json()['tags'] == expected_tags
 
     @allure.step('Check that info is the same as in the request')
     def check_info_is_correct(self, info):
         assert self.response.json()['info'] == info
+
+    @allure.step('Check that response data corresponds request payload')
+    def check_response_data(self, payload):
+        payload_dict = payload.to_dict()
+        for field, value in payload_dict.items():
+            assert getattr(self.model, field) == value
